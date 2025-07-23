@@ -67,10 +67,10 @@ Authors
 Contributors
 ------------
 
--  `Camptocamp <https://www.camptocamp.com>`__
+- `Camptocamp <https://www.camptocamp.com>`__
 
-      -  Thierry Ducrest <thierry.ducrest@camptocamp.com>
-      -  Tris Doan <tridm@trobz.com>
+     - Thierry Ducrest <thierry.ducrest@camptocamp.com>
+     - Tris Doan <tridm@trobz.com>
 
 Other credits
 -------------
