@@ -1,16 +1,6 @@
 /* @odoo-module */
 
-import {discussSidebarCategoriesRegistry} from "@mail/discuss/core/web/discuss_sidebar_categories";
-
-discussSidebarCategoriesRegistry.add(
-    "gateway",
-    {
-        predicate: (store) => {
-            store.discuss.gateway.threads.some(
-                (thread) => thread?.displayToSelf || thread?.isLocallyPinned
-            );
-        },
-        value: (store) => store.discuss.gateway,
-    },
-    {sequence: 30}
-);
+// Removed: the gateway category is now displayed automatically through the
+// default DiscussSidebarCategories component, thanks to the DiscussApp patch
+// that inserts `gateway` into `store.discuss.allCategories`. No explicit
+// registration is necessary in Odoo 18.

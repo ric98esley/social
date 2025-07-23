@@ -1,5 +1,5 @@
 /* @odoo-module */
-import {Gateway} from "../../models/gateway.esm";
+import {Gateway} from "@mail_gateway/models/gateway.esm";
 import {Store} from "@mail/core/common/store_service";
 import {patch} from "@web/core/utils/patch";
 

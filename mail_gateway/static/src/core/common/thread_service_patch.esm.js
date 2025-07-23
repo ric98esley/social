@@ -1,19 +1,26 @@
 /* @odoo-module */
-import {ThreadService} from "@mail/core/common/thread_service";
+
+// ThreadService no longer exists in Odoo 18.0. The required hooks are now
+// handled in the Store service. This patch re-implements the previous
+// behaviour on top of the new API while keeping the gateway features.
+
+import {Store} from "@mail/core/common/store_service";
 import {patch} from "@web/core/utils/patch";
 
-patch(ThreadService.prototype, {
-    async fetchData(thread, ...args) {
-        const result = await super.fetchData(thread, ...args);
-        thread.gateway_followers = result.gateway_followers;
-        return result;
-    },
+patch(Store.prototype, {
+    /**
+     * Extend message post params to forward gateway notifications.
+     *
+     * @override
+     */
     async getMessagePostParams(params) {
-        const post_params = await super.getMessagePostParams(...arguments);
-        if (params.thread.gateway_notifications) {
-            post_params.post_data.gateway_notifications =
+        const result = await super.getMessagePostParams(...arguments);
+        if (params.thread?.gateway_notifications) {
+            // Ensure the nested structures exist before assignment
+            result.post_data = result.post_data || {};
+            result.post_data.gateway_notifications =
                 params.thread.gateway_notifications;
         }
-        return post_params;
+        return result;
     },
 });

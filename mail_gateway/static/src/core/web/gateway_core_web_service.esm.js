@@ -4,17 +4,14 @@ import {registry} from "@web/core/registry";
 
 export class GatewayCoreWeb {
     constructor(env, services) {
-        Object.assign(this, {
-            busService: services.bus_service,
-        });
-        /** @type {import("@mail/core/common/messaging_service").Messaging} */
-        this.messagingService = services["mail.messaging"];
+        this.busService = services.bus_service;
         /** @type {import("@mail/core/common/store_service").Store} */
         this.store = services["mail.store"];
     }
     setup() {
-        this.messagingService.isReady.then((data) => {
-            if (data.current_user_settings?.is_discuss_sidebar_category_gateway_open) {
+        // Esperar a que el Store haya terminado de cargar la mensajería
+        this.store.isReady.then(() => {
+            if (this.store.settings?.is_discuss_sidebar_category_gateway_open) {
                 this.store.discuss.gateway.isOpen = true;
             }
             this.busService.subscribe("res.users.settings", (payload) => {
@@ -29,11 +26,11 @@ export class GatewayCoreWeb {
 }
 
 export const gatewayCoreWeb = {
-    dependencies: ["bus_service", "mail.messaging", "mail.store"],
+    dependencies: ["bus_service", "mail.store"],
     start(env, services) {
-        const gatewayCoreWeb = reactive(new GatewayCoreWeb(env, services));
-        gatewayCoreWeb.setup();
-        return gatewayCoreWeb;
+        const gw = reactive(new GatewayCoreWeb(env, services));
+        gw.setup();
+        return gw;
     },
 };
 
